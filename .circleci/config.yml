@@ -1,0 +1,24 @@
+version: 2.1
+orbs:
+  node: circleci/node@3.0.0
+  slack: circleci/slack@3.4.2
+  newman: postman/newman@0.0.2
+
+nightly:
+     triggers:
+       - schedule:
+           - cron: "30 * * * *"
+
+jobs:
+ 
+  newman-collection-run:
+    executor: newman/postman-newman-docker
+    steps:
+      - checkout
+      - newman/newman-run:
+          collection: ./Userservice-collection/"Organization - Dev.postman_collection.json" --environment ./Userservice-collection/OrgDevTest.postman_environment.json         
+
+workflows:
+  node-tests:
+    jobs:
+      - node/test
